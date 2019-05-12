@@ -19,6 +19,7 @@ namespace QFSW.MOP2
             {
                 _pool.GetObject(3 * new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
             }
+            if (Input.GetKeyDown("u")) { _pool.ReleaseAll(); }
         }
     }
 }

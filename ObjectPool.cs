@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace QFSW.MOP2
@@ -12,13 +11,27 @@ namespace QFSW.MOP2
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
 
-        public GameObject ObjectParent { get; private set; }
+        public Transform ObjectParent
+        {
+            get
+            {
+                if (!_objectParent)
+                {
+                    _objectParent = new GameObject(string.Format("{0}Pool", _name)).transform;
+                }
+
+                return _objectParent;
+            }
+        }
+        private Transform _objectParent;
 
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
 
         private readonly List<GameObject> _pooledObjects = new List<GameObject>();
         private readonly Dictionary<int, GameObject> _aliveObjects = new Dictionary<int, GameObject>();
+
+        private readonly List<GameObject> _releaseAllBuffer = new List<GameObject>();
 
         public static ObjectPool Create(GameObject template, int defaultSize = 0, int maxSize = -1)
         {
@@ -39,9 +52,21 @@ namespace QFSW.MOP2
 
         public void Initialize()
         {
+            if (string.IsNullOrWhiteSpace(_name))
+            {
+                _name = _template.name;
+                ObjectParent.name = _name;
+            }
 
-            if (string.IsNullOrWhiteSpace(_name)) { _name = _template.name; }
             Populate(_defaultSize, PopulateMethod.Set);
+        }
+
+        private GameObject CreateNewObject()
+        {
+            GameObject newObj = Instantiate(_template);
+            newObj.name = _template.name;
+            newObj.transform.parent = ObjectParent;
+            return newObj;
         }
 
         public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
@@ -59,8 +84,7 @@ namespace QFSW.MOP2
 
             for (int i = 0; i < newObjCount; i++)
             {
-                GameObject newObj = GameObject.Instantiate(_template);
-                newObj.name = _template.name;
+                GameObject newObj = CreateNewObject();
                 newObj.SetActive(false);
                 _pooledObjects.Add(newObj);
             }
@@ -84,8 +108,7 @@ namespace QFSW.MOP2
             }
             else
             {
-                obj = Instantiate(_template);
-                obj.name = _template.name;
+                obj = CreateNewObject();
             }
 
             obj.transform.position = position;
@@ -109,7 +132,7 @@ namespace QFSW.MOP2
             {
                 if (HasMaxSize && _pooledObjects.Count >= _maxSize)
                 {
-                    Destroy(obj);
+                    Object.Destroy(obj);
                 }
                 else
                 {
@@ -127,10 +150,17 @@ namespace QFSW.MOP2
             }
         }
 
+        public void ReleaseAll()
+        {
+            _releaseAllBuffer.Clear();
+            _releaseAllBuffer.AddRange(_aliveObjects.Values);
+            Release(_releaseAllBuffer);
+        }
+
         public void Destroy(GameObject obj)
         {
             _aliveObjects.Remove(obj.GetInstanceID());
-            Destroy(obj);
+            Object.Destroy(obj);
         }
 
         public void Destroy(IEnumerable<GameObject> objs)
@@ -143,8 +173,8 @@ namespace QFSW.MOP2
 
         public void Purge()
         {
-            foreach (GameObject obj in _pooledObjects) { Destroy(obj); }
-            foreach (GameObject obj in _aliveObjects.Values) { Destroy(obj); }
+            foreach (GameObject obj in _pooledObjects) { Object.Destroy(obj); }
+            foreach (GameObject obj in _aliveObjects.Values) { Object.Destroy(obj); }
             _pooledObjects.Clear();
             _aliveObjects.Clear();
         }
