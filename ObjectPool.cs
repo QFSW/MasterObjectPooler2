@@ -57,7 +57,7 @@ namespace QFSW.MOP2
             }
             else
             {
-                obj = Instantiate(_template, position, rotation);
+                obj = Instantiate(_template);
                 obj.name = _template.name;
             }
 
@@ -70,11 +70,33 @@ namespace QFSW.MOP2
             return obj;
         }
 
-        public void Destroy(IEnumerable<GameObject> objs)
+        public void Release(GameObject obj)
+        {
+            if (!_aliveObjects.Remove(obj.GetInstanceID()))
+            {
+                Debug.LogWarning(string.Format("Object '{0}' could not be found in pool '{1}'; it may have already been released.", obj, _name));
+                return;
+            }
+
+            if (obj)
+            {
+                if (HasMaxSize && _pooledObjects.Count >= _maxSize)
+                {
+                    Destroy(obj);
+                }
+                else
+                {
+                    _pooledObjects.Add(obj);
+                    obj.SetActive(false);
+                }
+            }
+        }
+
+        public void Release(IEnumerable<GameObject> objs)
         {
             foreach (GameObject obj in objs)
             {
-                Destroy(obj);
+                Release(obj);
             }
         }
 
@@ -82,6 +104,14 @@ namespace QFSW.MOP2
         {
             _aliveObjects.Remove(obj.GetInstanceID());
             Destroy(obj);
+        }
+
+        public void Destroy(IEnumerable<GameObject> objs)
+        {
+            foreach (GameObject obj in objs)
+            {
+                Destroy(obj);
+            }
         }
 
         public void Purge()
