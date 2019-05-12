@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace QFSW.MOP2
 {
+    [CreateAssetMenu(fileName = "Untitled Pool", menuName = "Master Object Pooler 2/Object Pool", order = 0)]
     public class ObjectPool : ScriptableObject
     {
         [SerializeField] private string _name = string.Empty;
@@ -29,6 +30,14 @@ namespace QFSW.MOP2
             pool._maxSize = maxSize;
 
             return pool;
+        }
+
+        public void Destroy(IEnumerable<GameObject> objs)
+        {
+            foreach (GameObject obj in objs)
+            {
+                Destroy(obj);
+            }
         }
 
         public void Destroy(GameObject obj)
