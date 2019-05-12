@@ -61,9 +61,9 @@ namespace QFSW.MOP2
             }
         }
 
-        public GameObject Resurrect() { return Resurrect(_template.transform.position); }
-        public GameObject Resurrect(Vector3 position) { return Resurrect(position, _template.transform.rotation); }
-        public GameObject Resurrect(Vector3 position, Quaternion rotation)
+        public GameObject GetInstance() { return GetInstance(_template.transform.position); }
+        public GameObject GetInstance(Vector3 position) { return GetInstance(position, _template.transform.rotation); }
+        public GameObject GetInstance(Vector3 position, Quaternion rotation)
         {
             GameObject obj;
             if (HasPooledObjects)
@@ -74,7 +74,7 @@ namespace QFSW.MOP2
                 if (!obj)
                 {
                     Debug.LogWarning(string.Format("Object in pool '{0}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object", _name));
-                    return Resurrect(position, rotation);
+                    return GetInstance(position, rotation);
                 }
             }
             else
