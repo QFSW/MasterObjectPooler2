@@ -12,6 +12,8 @@ namespace QFSW.MOP2
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
 
+        public GameObject ObjectParent { get; private set; }
+
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
 
@@ -34,9 +36,10 @@ namespace QFSW.MOP2
             return pool;
         }
 
-        private void Awake()
+        public void Initialize()
         {
             if (string.IsNullOrWhiteSpace(_name)) { _name = _template.name; }
+            Populate(_defaultSize, PopulateMethod.Set);
         }
 
         public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
