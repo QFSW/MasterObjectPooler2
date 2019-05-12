@@ -12,13 +12,15 @@ namespace QFSW.MOP2
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
 
+        private bool HasMaxSize => _maxSize > 0;
+        private bool HasPooledObjects => _pooledObjects.Count > 0;
+
         private readonly List<GameObject> _pooledObjects = new List<GameObject>();
         private readonly Dictionary<int, GameObject> _aliveObjects = new Dictionary<int, GameObject>();
 
         public static ObjectPool Create(GameObject template, int defaultSize = 0, int maxSize = -1)
         {
-            string name = template.name;
-            return Create(template, name, defaultSize, maxSize);
+            return Create(template, template.name, defaultSize, maxSize);
         }
 
         public static ObjectPool Create(GameObject template, string name, int defaultSize = 0, int maxSize = -1)
@@ -30,6 +32,42 @@ namespace QFSW.MOP2
             pool._maxSize = maxSize;
 
             return pool;
+        }
+
+        private void Awake()
+        {
+            if (string.IsNullOrWhiteSpace(_name)) { _name = _template.name; }
+        }
+
+        public GameObject Resurrect() { return Resurrect(_template.transform.position); }
+        public GameObject Resurrect(Vector3 position) { return Resurrect(position, _template.transform.rotation); }
+        public GameObject Resurrect(Vector3 position, Quaternion rotation)
+        {
+            GameObject obj;
+            if (HasPooledObjects)
+            {
+                obj = _pooledObjects[_pooledObjects.Count - 1];
+                _pooledObjects.RemoveAt(_pooledObjects.Count - 1);
+
+                if (!obj)
+                {
+                    Debug.LogWarning(string.Format("Object in pool '{0}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object", _name));
+                    return Resurrect(position, rotation);
+                }
+            }
+            else
+            {
+                obj = Instantiate(_template, position, rotation);
+                obj.name = _template.name;
+            }
+
+            obj.transform.position = position;
+            obj.transform.rotation = rotation;
+
+            obj.SetActive(true);
+
+            _aliveObjects.Add(obj.GetInstanceID(), obj);
+            return obj;
         }
 
         public void Destroy(IEnumerable<GameObject> objs)
