@@ -33,11 +33,13 @@ namespace QFSW.MOP2
             pool._defaultSize = defaultSize;
             pool._maxSize = maxSize;
 
+            pool.Initialize();
             return pool;
         }
 
         public void Initialize()
         {
+
             if (string.IsNullOrWhiteSpace(_name)) { _name = _template.name; }
             Populate(_defaultSize, PopulateMethod.Set);
         }
@@ -64,9 +66,9 @@ namespace QFSW.MOP2
             }
         }
 
-        public GameObject GetInstance() { return GetInstance(_template.transform.position); }
-        public GameObject GetInstance(Vector3 position) { return GetInstance(position, _template.transform.rotation); }
-        public GameObject GetInstance(Vector3 position, Quaternion rotation)
+        public GameObject GetObject() { return GetObject(_template.transform.position); }
+        public GameObject GetObject(Vector3 position) { return GetObject(position, _template.transform.rotation); }
+        public GameObject GetObject(Vector3 position, Quaternion rotation)
         {
             GameObject obj;
             if (HasPooledObjects)
@@ -77,7 +79,7 @@ namespace QFSW.MOP2
                 if (!obj)
                 {
                     Debug.LogWarning(string.Format("Object in pool '{0}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object", _name));
-                    return GetInstance(position, rotation);
+                    return GetObject(position, rotation);
                 }
             }
             else

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Untitled Pool
   m_EditorClassIdentifier: 
   _name: 
-  _template: {fileID: 0}
+  _template: {fileID: 1261183531387105671, guid: 70d0ff6bbae1f824c873838f881e3488,
+    type: 3}
   _defaultSize: 5
   _maxSize: -1
