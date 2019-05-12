@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: 
   _template: {fileID: 0}
-  _defaultSize: 0
+  _defaultSize: 5
   _maxSize: -1

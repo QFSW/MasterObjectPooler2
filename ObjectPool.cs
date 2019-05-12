@@ -39,6 +39,28 @@ namespace QFSW.MOP2
             if (string.IsNullOrWhiteSpace(_name)) { _name = _template.name; }
         }
 
+        public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
+        {
+            int newObjCount;
+            switch (method)
+            {
+                case PopulateMethod.Set: newObjCount = quantity - _pooledObjects.Count; break;
+                case PopulateMethod.Add: newObjCount = quantity; break;
+                default: newObjCount = 0; break;
+            }
+
+            if (HasMaxSize) { newObjCount = Mathf.Min(newObjCount, _maxSize - _pooledObjects.Count); }
+            if (newObjCount < 0) { newObjCount = 0; }
+
+            for (int i = 0; i < newObjCount; i++)
+            {
+                GameObject newObj = GameObject.Instantiate(_template);
+                newObj.name = _template.name;
+                newObj.SetActive(false);
+                _pooledObjects.Add(newObj);
+            }
+        }
+
         public GameObject Resurrect() { return Resurrect(_template.transform.position); }
         public GameObject Resurrect(Vector3 position) { return Resurrect(position, _template.transform.rotation); }
         public GameObject Resurrect(Vector3 position, Quaternion rotation)
