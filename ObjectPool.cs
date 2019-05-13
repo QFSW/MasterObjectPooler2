@@ -46,7 +46,6 @@ namespace QFSW.MOP2
             pool._defaultSize = defaultSize;
             pool._maxSize = maxSize;
 
-            pool.Initialize();
             return pool;
         }
 
@@ -67,7 +66,6 @@ namespace QFSW.MOP2
         {
             foreach (IPoolable poolable in _template.GetComponentsInChildren<IPoolable>())
             {
-                Debug.Log(poolable);
                 poolable.InitializeTemplate(this);
             }
         }

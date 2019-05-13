@@ -27,7 +27,7 @@ namespace QFSW.MOP2
             if (_scaledTime) { _elapsedTime += Time.deltaTime; }
             else { _elapsedTime += Time.unscaledDeltaTime; }
 
-            if (_elapsedTime > _poolTimer) { _parentPool.Release(gameObject); }
+            if (_elapsedTime > _poolTimer && _parentPool) { _parentPool.Release(gameObject); }
         }
     }
 }
