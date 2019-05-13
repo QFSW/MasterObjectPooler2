@@ -59,5 +59,44 @@ namespace QFSW.MOP2
                 AddPool(poolName, value);
             }
         }
+
+        public void ReleaseAllInAllPools()
+        {
+            foreach (ObjectPool pool in _poolTable.Values)
+            {
+                pool.ReleaseAll();
+            }
+        }
+
+        public void PurgeAll()
+        {
+            foreach (ObjectPool pool in _poolTable.Values)
+            {
+                pool.Purge();
+            }
+        }
+
+        public void DestroyAllPools()
+        {
+            foreach (ObjectPool pool in _poolTable.Values)
+            {
+                DestroyPoolInternal(pool);
+            }
+
+            _poolTable.Clear();
+        }
+
+        public void DestroyPool(string poolName)
+        {
+            ObjectPool pool = GetPool(poolName);
+            DestroyPoolInternal(pool);
+            _poolTable.Remove(poolName);
+        }
+
+        private void DestroyPoolInternal(ObjectPool pool)
+        {
+            pool.Purge();
+            Destroy(pool.ObjectParent);
+        }
     }
 }
