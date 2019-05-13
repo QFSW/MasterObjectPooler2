@@ -58,7 +58,18 @@ namespace QFSW.MOP2
                 ObjectParent.name = _name;
             }
 
+            InitializeIPoolables();
+
             Populate(_defaultSize, PopulateMethod.Set);
+        }
+
+        private void InitializeIPoolables()
+        {
+            foreach (IPoolable poolable in _template.GetComponentsInChildren<IPoolable>())
+            {
+                Debug.Log(poolable);
+                poolable.InitializeTemplate(this);
+            }
         }
 
         private GameObject CreateNewObject()
