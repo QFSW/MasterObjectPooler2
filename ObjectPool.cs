@@ -191,6 +191,7 @@ namespace QFSW.MOP2
             foreach (GameObject obj in _aliveObjects.Values) { Object.Destroy(obj); }
             _pooledObjects.Clear();
             _aliveObjects.Clear();
+            _componentCache.Clear();
         }
 
         public T GetObjectComponent<T>() where T : class
