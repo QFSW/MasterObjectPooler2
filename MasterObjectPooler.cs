@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,15 +15,48 @@ namespace QFSW.MOP2
         {
             foreach (ObjectPool pool in _pools)
             {
-                pool.Initialize();
-                if (_poolTable.ContainsKey(pool.PoolName))
-                {
-                    Debug.LogWarning(string.Format("{0} could not be added to the pool table as a pool with the same name already exists", pool.PoolName));
-                }
-                else
-                {
-                    _poolTable.Add(pool.PoolName, pool);
-                }
+                AddPool(pool);
+            }
+        }
+
+        public void AddPool(ObjectPool pool) { AddPool(pool.PoolName, pool); }
+        public void AddPool(string poolName, ObjectPool pool)
+        {
+            pool.Initialize();
+            pool.ObjectParent.parent = transform;
+
+            if (_poolTable.ContainsKey(poolName))
+            {
+                Debug.LogWarning(string.Format("{0} could not be added to the pool table as a pool with the same name already exists", poolName));
+            }
+            else
+            {
+                _poolTable.Add(poolName, pool);
+            }
+        }
+
+        public ObjectPool GetPool(string poolName)
+        {
+            if (_poolTable.ContainsKey(poolName))
+            {
+                return _poolTable[poolName];
+            }
+            else
+            {
+                throw new ArgumentException(string.Format("Cannot get pool {0} as it is not present in the pool table", poolName));
+            }
+        }
+
+        public ObjectPool this[string poolName]
+        {
+            get
+            {
+                return GetPool(poolName);
+            }
+            set
+            {
+                _poolTable.Remove(poolName);
+                AddPool(poolName, value);
             }
         }
     }
