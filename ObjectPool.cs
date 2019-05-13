@@ -178,5 +178,20 @@ namespace QFSW.MOP2
             _pooledObjects.Clear();
             _aliveObjects.Clear();
         }
+
+        public T GetObject<T>()
+        {
+            return GetObject().GetComponent<T>();
+        }
+
+        public T GetObject<T>(Vector3 position)
+        {
+            return GetObject(position).GetComponent<T>();
+        }
+
+        public T GetObject<T>(Vector3 position, Quaternion rotation)
+        {
+            return GetObject(position, rotation).GetComponent<T>();
+        }
     }
 }
