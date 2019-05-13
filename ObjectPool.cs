@@ -57,6 +57,8 @@ namespace QFSW.MOP2
                 ObjectParent.name = _name;
             }
 
+            if (string.IsNullOrWhiteSpace(name)) { name = _name; }
+
             InitializeIPoolables();
 
             Populate(_defaultSize, PopulateMethod.Set);
