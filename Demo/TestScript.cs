@@ -17,7 +17,8 @@ namespace QFSW.MOP2
         {
             if (Input.GetKey("i"))
             {
-                _pool.GetObject(3 * new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+                SpriteRenderer rend = _pool.GetObjectComponent<SpriteRenderer>(3 * new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+                rend.color = new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
             }
             if (Input.GetKeyDown("u")) { _pool.ReleaseAll(); }
         }

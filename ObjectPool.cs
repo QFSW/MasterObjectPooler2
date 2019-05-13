@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace QFSW.MOP2
 {
@@ -32,6 +34,7 @@ namespace QFSW.MOP2
         private readonly Dictionary<int, GameObject> _aliveObjects = new Dictionary<int, GameObject>();
 
         private readonly List<GameObject> _releaseAllBuffer = new List<GameObject>();
+        private readonly Dictionary<Tuple2<int, Type>, object> _componentCache = new Dictionary<Tuple2<int, Type>, object>();
 
         public static ObjectPool Create(GameObject template, int defaultSize = 0, int maxSize = -1)
         {
@@ -190,19 +193,32 @@ namespace QFSW.MOP2
             _aliveObjects.Clear();
         }
 
-        public T GetObject<T>()
+        public T GetObjectComponent<T>() where T : class
         {
-            return GetObject().GetComponent<T>();
+            return GetObjectComponent<T>(_template.transform.position);
         }
 
-        public T GetObject<T>(Vector3 position)
+        public T GetObjectComponent<T>(Vector3 position) where T : class
         {
-            return GetObject(position).GetComponent<T>();
+            return GetObjectComponent<T>(position, _template.transform.rotation);
         }
 
-        public T GetObject<T>(Vector3 position, Quaternion rotation)
+        public T GetObjectComponent<T>(Vector3 position, Quaternion rotation) where T : class
         {
-            return GetObject(position, rotation).GetComponent<T>();
+            GameObject obj = GetObject(position, rotation);
+            Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
+            T component;
+
+            if (_componentCache.ContainsKey(key))
+            {
+                component = _componentCache[key] as T;
+                if (component == null) { _componentCache.Remove(key); }
+                else { return _componentCache[key] as T; }
+            }
+
+            component = obj.GetComponent<T>();
+            if (component != null) { _componentCache[key] = component; }
+            return component;
         }
     }
 }

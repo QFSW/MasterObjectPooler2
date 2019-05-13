@@ -8,6 +8,12 @@ namespace QFSW.MOP2
         public readonly T1 Value1;
         public readonly T2 Value2;
 
+        public Tuple2(T1 value1, T2 value2)
+        {
+            Value1 = value1;
+            Value2 = value2;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is Tuple2<T1, T2> tuple && Equals(tuple);
