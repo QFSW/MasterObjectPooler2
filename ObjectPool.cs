@@ -13,6 +13,8 @@ namespace QFSW.MOP2
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
 
+        public string PoolName => _name;
+
         public Transform ObjectParent
         {
             get
