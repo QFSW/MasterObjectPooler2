@@ -18,7 +18,7 @@ namespace QFSW.MOP2.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
-            property.objectReferenceValue = EditorGUILayout.ObjectField(label, property.objectReferenceValue, typeof(ObjectPool), true);
+            //property.objectReferenceValue = EditorGUILayout.ObjectField(label, property.objectReferenceValue, typeof(ObjectPool), true);
             EditorGUI.EndProperty();
         }
     }

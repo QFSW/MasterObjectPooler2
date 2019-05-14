@@ -12,6 +12,7 @@ namespace QFSW.MOP2
         [SerializeField] private GameObject _template = null;
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
+        [SerializeField] private bool _incrementalInstanceNames;
 
         public string PoolName => _name;
 
@@ -31,6 +32,8 @@ namespace QFSW.MOP2
 
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
+
+        private int _instanceCounter = 0;
 
         #region Caches
         private readonly List<GameObject> _pooledObjects = new List<GameObject>();
@@ -85,8 +88,18 @@ namespace QFSW.MOP2
         private GameObject CreateNewObject()
         {
             GameObject newObj = Instantiate(_template);
-            newObj.name = _template.name;
             newObj.transform.parent = ObjectParent;
+
+            if (_incrementalInstanceNames)
+            {
+                newObj.name = string.Format("{0}#{1}", _template.name, _instanceCounter);
+            }
+            else
+            {
+                newObj.name = _template.name;
+            }
+
+            _instanceCounter++;
             return newObj;
         }
         #endregion
