@@ -32,12 +32,15 @@ namespace QFSW.MOP2
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
 
+        #region Caches
         private readonly List<GameObject> _pooledObjects = new List<GameObject>();
         private readonly Dictionary<int, GameObject> _aliveObjects = new Dictionary<int, GameObject>();
 
         private readonly List<GameObject> _releaseAllBuffer = new List<GameObject>();
         private readonly Dictionary<Tuple2<int, Type>, object> _componentCache = new Dictionary<Tuple2<int, Type>, object>();
+        #endregion
 
+        #region Initialization/Creation
         public static ObjectPool Create(GameObject template, int defaultSize = 0, int maxSize = -1)
         {
             return Create(template, template.name, defaultSize, maxSize);
@@ -76,7 +79,9 @@ namespace QFSW.MOP2
                 poolable.InitializeTemplate(this);
             }
         }
+        #endregion
 
+        #region Internal
         private GameObject CreateNewObject()
         {
             GameObject newObj = Instantiate(_template);
@@ -84,28 +89,9 @@ namespace QFSW.MOP2
             newObj.transform.parent = ObjectParent;
             return newObj;
         }
+        #endregion
 
-        public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
-        {
-            int newObjCount;
-            switch (method)
-            {
-                case PopulateMethod.Set: newObjCount = quantity - _pooledObjects.Count; break;
-                case PopulateMethod.Add: newObjCount = quantity; break;
-                default: newObjCount = 0; break;
-            }
-
-            if (HasMaxSize) { newObjCount = Mathf.Min(newObjCount, _maxSize - _pooledObjects.Count); }
-            if (newObjCount < 0) { newObjCount = 0; }
-
-            for (int i = 0; i < newObjCount; i++)
-            {
-                GameObject newObj = CreateNewObject();
-                newObj.SetActive(false);
-                _pooledObjects.Add(newObj);
-            }
-        }
-
+        #region GetObject/Component
         public GameObject GetObject() { return GetObject(_template.transform.position); }
         public GameObject GetObject(Vector3 position) { return GetObject(position, _template.transform.rotation); }
         public GameObject GetObject(Vector3 position, Quaternion rotation)
@@ -136,6 +122,36 @@ namespace QFSW.MOP2
             return obj;
         }
 
+        public T GetObjectComponent<T>() where T : class
+        {
+            return GetObjectComponent<T>(_template.transform.position);
+        }
+
+        public T GetObjectComponent<T>(Vector3 position) where T : class
+        {
+            return GetObjectComponent<T>(position, _template.transform.rotation);
+        }
+
+        public T GetObjectComponent<T>(Vector3 position, Quaternion rotation) where T : class
+        {
+            GameObject obj = GetObject(position, rotation);
+            Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
+            T component;
+
+            if (_componentCache.ContainsKey(key))
+            {
+                component = _componentCache[key] as T;
+                if (component == null) { _componentCache.Remove(key); }
+                else { return _componentCache[key] as T; }
+            }
+
+            component = obj.GetComponent<T>();
+            if (component != null) { _componentCache[key] = component; }
+            return component;
+        }
+        #endregion
+
+        #region Release/Destroy
         public void Release(GameObject obj)
         {
             if (!_aliveObjects.Remove(obj.GetInstanceID()))
@@ -186,6 +202,29 @@ namespace QFSW.MOP2
                 Destroy(obj);
             }
         }
+        #endregion
+
+        #region Miscellaneous
+        public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
+        {
+            int newObjCount;
+            switch (method)
+            {
+                case PopulateMethod.Set: newObjCount = quantity - _pooledObjects.Count; break;
+                case PopulateMethod.Add: newObjCount = quantity; break;
+                default: newObjCount = 0; break;
+            }
+
+            if (HasMaxSize) { newObjCount = Mathf.Min(newObjCount, _maxSize - _pooledObjects.Count); }
+            if (newObjCount < 0) { newObjCount = 0; }
+
+            for (int i = 0; i < newObjCount; i++)
+            {
+                GameObject newObj = CreateNewObject();
+                newObj.SetActive(false);
+                _pooledObjects.Add(newObj);
+            }
+        }
 
         public void Purge()
         {
@@ -195,33 +234,6 @@ namespace QFSW.MOP2
             _aliveObjects.Clear();
             _componentCache.Clear();
         }
-
-        public T GetObjectComponent<T>() where T : class
-        {
-            return GetObjectComponent<T>(_template.transform.position);
-        }
-
-        public T GetObjectComponent<T>(Vector3 position) where T : class
-        {
-            return GetObjectComponent<T>(position, _template.transform.rotation);
-        }
-
-        public T GetObjectComponent<T>(Vector3 position, Quaternion rotation) where T : class
-        {
-            GameObject obj = GetObject(position, rotation);
-            Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
-            T component;
-
-            if (_componentCache.ContainsKey(key))
-            {
-                component = _componentCache[key] as T;
-                if (component == null) { _componentCache.Remove(key); }
-                else { return _componentCache[key] as T; }
-            }
-
-            component = obj.GetComponent<T>();
-            if (component != null) { _componentCache[key] = component; }
-            return component;
-        }
+        #endregion
     }
 }
