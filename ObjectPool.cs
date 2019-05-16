@@ -66,6 +66,11 @@ namespace QFSW.MOP2
             return pool;
         }
 
+        private void OnEnable()
+        {
+            _instanceCounter = 0;
+        }
+
         public void Initialize()
         {
             if (string.IsNullOrWhiteSpace(_name))
