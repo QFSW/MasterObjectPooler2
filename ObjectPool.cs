@@ -12,8 +12,14 @@ namespace QFSW.MOP2
         [SerializeField] private GameObject _template = null;
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
-        [SerializeField] private bool _incrementalInstanceNames;
+        [SerializeField] private bool _incrementalInstanceNames = false;
 
+
+        public bool IncrementalInstanceNames
+        {
+            get => _incrementalInstanceNames;
+            set => _incrementalInstanceNames = value;
+        }
         public string PoolName => _name;
 
         public Transform ObjectParent
