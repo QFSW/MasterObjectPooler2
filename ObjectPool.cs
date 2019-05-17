@@ -103,7 +103,7 @@ namespace QFSW.MOP2
 
             if (_incrementalInstanceNames)
             {
-                newObj.name = string.Format("{0}#{1}", _template.name, _instanceCounter);
+                newObj.name = string.Format("{0}#{1:000}", _template.name, _instanceCounter);
             }
             else
             {

@@ -17,3 +17,4 @@ MonoBehaviour:
     type: 3}
   _defaultSize: 5
   _maxSize: -1
+  _incrementalInstanceNames: 1
