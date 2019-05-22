@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace QFSW.MOP2
@@ -69,6 +70,12 @@ namespace QFSW.MOP2
         private void OnEnable()
         {
             _instanceCounter = 0;
+            SceneManager.sceneUnloaded += OnSceneUnload;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneUnloaded -= OnSceneUnload;
         }
 
         public void Initialize()
@@ -257,6 +264,22 @@ namespace QFSW.MOP2
             _pooledObjects.Clear();
             _aliveObjects.Clear();
             _componentCache.Clear();
+        }
+        #endregion
+
+        #region Callbacks
+        private void OnSceneUnload(Scene scene)
+        {
+            if (!_objectParent)
+            {
+                _pooledObjects.Clear();
+                _aliveObjects.Clear();
+                _componentCache.Clear();
+            }
+            else
+            {
+                _pooledObjects.RemoveAll(x => !x);
+            }
         }
         #endregion
     }
