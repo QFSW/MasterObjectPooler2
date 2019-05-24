@@ -166,6 +166,11 @@ namespace QFSW.MOP2
         public T GetObjectComponent<T>(Vector3 position, Quaternion rotation) where T : class
         {
             GameObject obj = GetObject(position, rotation);
+            return GetObjectComponent<T>(obj);
+        }
+
+        public T GetObjectComponent<T>(GameObject obj) where T : class
+        {
             Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
             T component;
 
