@@ -106,7 +106,7 @@ namespace QFSW.MOP2
         private GameObject CreateNewObject()
         {
             GameObject newObj = Instantiate(_template);
-            newObj.transform.parent = ObjectParent;
+            newObj.transform.SetParent(ObjectParent, false);
 
             if (_incrementalInstanceNames)
             {
