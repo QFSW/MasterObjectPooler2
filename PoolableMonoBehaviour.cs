@@ -4,7 +4,7 @@ namespace QFSW.MOP2
 {
     public class PoolableMonoBehaviour : MonoBehaviour, IPoolable
     {
-        protected bool PoolReady => _parentPool;
+        public bool PoolReady => _parentPool;
 
         [SerializeField]
         [HideInInspector]
