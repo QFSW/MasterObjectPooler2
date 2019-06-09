@@ -29,7 +29,7 @@ namespace QFSW.MOP2
             {
                 if (!_objectParent)
                 {
-                    _objectParent = new GameObject(string.Format("{0}Pool", _name)).transform;
+                    _objectParent = new GameObject(string.Format("{0} Pool", _name)).transform;
                 }
 
                 return _objectParent;
