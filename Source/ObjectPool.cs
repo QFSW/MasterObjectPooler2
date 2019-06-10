@@ -103,9 +103,10 @@ namespace QFSW.MOP2
         #endregion
 
         #region Internal
-        private GameObject CreateNewObject()
+        private GameObject CreateNewObject() { return CreateNewObject(_template.transform.position, _template.transform.rotation); }
+        private GameObject CreateNewObject(Vector3 position, Quaternion rotation)
         {
-            GameObject newObj = Instantiate(_template);
+            GameObject newObj = Instantiate(_template, position, rotation);
             newObj.transform.SetParent(ObjectParent, false);
 
             if (_incrementalInstanceNames)
@@ -133,6 +134,9 @@ namespace QFSW.MOP2
                 obj = _pooledObjects[_pooledObjects.Count - 1];
                 _pooledObjects.RemoveAt(_pooledObjects.Count - 1);
 
+                obj.transform.position = position;
+                obj.transform.rotation = rotation;
+
                 if (!obj)
                 {
                     Debug.LogWarning(string.Format("Object in pool '{0}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object", _name));
@@ -141,11 +145,8 @@ namespace QFSW.MOP2
             }
             else
             {
-                obj = CreateNewObject();
+                obj = CreateNewObject(position, rotation);
             }
-
-            obj.transform.position = position;
-            obj.transform.rotation = rotation;
 
             obj.SetActive(true);
 
