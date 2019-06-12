@@ -13,5 +13,6 @@
   "version": "0.1.1",
   "unity": "2018.1",
 
-  "files": [ "Source" ]
+  "license": "LICENSE",
+  "readme": "README.md"
 }
