@@ -4,7 +4,7 @@ Master Object Pooler 2 is a high performance, flexible and easy to use object po
 
 ### Getting Started
 
-In order to get started, create an` ObjectPool` for your desired object.
+In order to get started, create an `ObjectPool` for your desired object.
 
 - Use `Create -> Master Object Pooler 2 -> Object Pool` to create it at edit time
 - Use `ObjectPool.CreateInstance()` to create one at runtime
