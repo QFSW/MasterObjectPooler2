@@ -6,6 +6,10 @@ using Object = UnityEngine.Object;
 
 namespace QFSW.MOP2
 {
+    /// <summary>
+    /// Object pool containing several copies of a template object (usually a prefab). Using the pool with GetObject and Release 
+    /// provides a high speed alternative to repeatadly calling Instantiate and Destroy.
+    /// </summary>
     [CreateAssetMenu(fileName = "Untitled Pool", menuName = "Master Object Pooler 2/Object Pool", order = 0)]
     public class ObjectPool : ScriptableObject
     {
@@ -14,7 +18,6 @@ namespace QFSW.MOP2
         [SerializeField] private int _defaultSize;
         [SerializeField] private int _maxSize = -1;
         [SerializeField] private bool _incrementalInstanceNames = false;
-
 
         public bool IncrementalInstanceNames
         {
