@@ -201,6 +201,10 @@ namespace QFSW.MOP2
         #endregion
 
         #region Release/Destroy
+        /// <summary>
+        /// Releases an object and returns it back to the pool, effectively 'destroying' it from the scene.
+        /// </summary>
+        /// <param name="obj">The object to release.</param>
         public void Release(GameObject obj)
         {
             if (!_aliveObjects.Remove(obj.GetInstanceID()))
@@ -223,6 +227,10 @@ namespace QFSW.MOP2
             }
         }
 
+        /// <summary>
+        /// Releases a collection of objects and returns them back to the pool, effectively 'destroying' them from the scene.
+        /// </summary>
+        /// <param name="objs">the objects to release.</param>
         public void Release(IEnumerable<GameObject> objs)
         {
             foreach (GameObject obj in objs)
@@ -231,6 +239,9 @@ namespace QFSW.MOP2
             }
         }
 
+        /// <summary>
+        /// Releases every active object in this pool.
+        /// </summary>
         public void ReleaseAll()
         {
             _releaseAllBuffer.Clear();
