@@ -13,10 +13,19 @@ namespace QFSW.MOP2
     [CreateAssetMenu(fileName = "Untitled Pool", menuName = "Master Object Pooler 2/Object Pool", order = 0)]
     public class ObjectPool : ScriptableObject
     {
+        [Tooltip("The name of the pool. Used for identification and as the key when using a MasterObjectPooler.")]
         [SerializeField] private string _name = string.Empty;
+
+        [Tooltip("The template object to center the pool on. All objects in the pool will be a copy of this object.")]
         [SerializeField] private GameObject _template = null;
+
+        [Tooltip("The default number of objects to create in this pool when initializing it.")]
         [SerializeField] private int _defaultSize;
+
+        [Tooltip("The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.")]
         [SerializeField] private int _maxSize = -1;
+
+        [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
 
         public bool IncrementalInstanceNames
