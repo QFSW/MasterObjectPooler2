@@ -156,8 +156,25 @@ namespace QFSW.MOP2
         #endregion
 
         #region GetObject/Component
+        /// <summary>
+        /// Gets an object from the pool.
+        /// </summary>
+        /// <returns>The retrieved object.</returns>
         public GameObject GetObject() { return GetObject(_template.transform.position); }
+
+        /// <summary>
+        /// Gets an object from the pool.
+        /// </summary>
+        /// <param name="position">The position to set the object to.</param>
+        /// <returns>The retrieved object.</returns>
         public GameObject GetObject(Vector3 position) { return GetObject(position, _template.transform.rotation); }
+
+        /// <summary>
+        /// Gets an object from the pool.
+        /// </summary>
+        /// <param name="position">The position to set the object to.</param>
+        /// <param name="rotation">The rotation to set the object to.</param>
+        /// <returns>The retrieved object.</returns>
         public GameObject GetObject(Vector3 position, Quaternion rotation)
         {
             GameObject obj;
