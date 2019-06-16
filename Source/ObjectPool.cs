@@ -107,6 +107,9 @@ namespace QFSW.MOP2
             SceneManager.sceneUnloaded -= OnSceneUnload;
         }
 
+        /// <summary>
+        /// Initializes the ObjectPool.
+        /// </summary>
         public void Initialize()
         {
             if (string.IsNullOrWhiteSpace(_name))
