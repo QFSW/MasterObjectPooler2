@@ -28,13 +28,23 @@ namespace QFSW.MOP2
         [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
 
+        /// <summary>
+        /// If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.
+        /// </summary>
         public bool IncrementalInstanceNames
         {
             get => _incrementalInstanceNames;
             set => _incrementalInstanceNames = value;
         }
+
+        /// <summary>
+        /// The name of the pool. Used for identification and as the key when using a MasterObjectPooler.
+        /// </summary>
         public string PoolName => _name;
 
+        /// <summary>
+        /// Parent transform for all pooled objects.
+        /// </summary>
         public Transform ObjectParent
         {
             get
