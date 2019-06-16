@@ -203,22 +203,50 @@ namespace QFSW.MOP2
             return obj;
         }
 
+        /// <summary>
+        /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>() where T : class
         {
             return GetObjectComponent<T>(_template.transform.position);
         }
 
+        /// <summary>
+        /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <param name="position">The position to set the object to.</param>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(Vector3 position) where T : class
         {
             return GetObjectComponent<T>(position, _template.transform.rotation);
         }
 
+        /// <summary>
+        /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <param name="position">The position to set the object to.</param>
+        /// <param name="rotation">The rotation to set the object to.</param>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(Vector3 position, Quaternion rotation) where T : class
         {
             GameObject obj = GetObject(position, rotation);
             return GetObjectComponent<T>(obj);
         }
 
+        /// <summary>
+        /// Retrieves the specified component from an object using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <param name="obj">The object to get the component from.</param>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(GameObject obj) where T : class
         {
             Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
@@ -228,7 +256,7 @@ namespace QFSW.MOP2
             {
                 component = _componentCache[key] as T;
                 if (component == null) { _componentCache.Remove(key); }
-                else { return _componentCache[key] as T; }
+                else { return component; }
             }
 
             component = obj.GetComponent<T>();
