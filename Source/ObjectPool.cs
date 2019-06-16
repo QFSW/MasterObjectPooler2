@@ -274,6 +274,11 @@ namespace QFSW.MOP2
         #endregion
 
         #region Miscellaneous
+        /// <summary>
+        /// Populates the pool with the specified number of objects, so that they do not need instantiating later.
+        /// </summary>
+        /// <param name="quantity">The number of objects to populate it with.</param>
+        /// <param name="method">The population mode.</param>
         public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
         {
             int newObjCount;
