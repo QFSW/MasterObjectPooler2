@@ -63,11 +63,28 @@ namespace QFSW.MOP2
         #endregion
 
         #region Initialization/Creation
+        private ObjectPool() {  }
+
+        /// <summary>
+        /// Creates an ObjectPool.
+        /// </summary>
+        /// <param name="template">The template object to center the pool on. All objects in the pool will be a copy of this object.</param>
+        /// <param name="defaultSize">The default number of objects to create in this pool when initializing it.</param>
+        /// <param name="maxSize">The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.</param>
+        /// <returns>The created ObjectPool.</returns>
         public static ObjectPool Create(GameObject template, int defaultSize = 0, int maxSize = -1)
         {
             return Create(template, template.name, defaultSize, maxSize);
         }
 
+        /// <summary>
+        /// Creates an ObjectPool.
+        /// </summary>
+        /// <param name="template">The template object to center the pool on. All objects in the pool will be a copy of this object.</param>
+        /// <param name="name">The name of the pool. Used for identification and as the key when using a MasterObjectPooler.</param>
+        /// <param name="defaultSize">The default number of objects to create in this pool when initializing it.</param>
+        /// <param name="maxSize">The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.</param>
+        /// <returns>The created ObjectPool.</returns>
         public static ObjectPool Create(GameObject template, string name, int defaultSize = 0, int maxSize = -1)
         {
             ObjectPool pool = CreateInstance<ObjectPool>();
