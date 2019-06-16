@@ -300,6 +300,9 @@ namespace QFSW.MOP2
             }
         }
 
+        /// <summary>
+        /// Destroys every object in the pool, both alive and pooled.
+        /// </summary>
         public void Purge()
         {
             foreach (GameObject obj in _pooledObjects) { Object.Destroy(obj); }
