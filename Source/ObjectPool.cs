@@ -6,23 +6,45 @@ using Object = UnityEngine.Object;
 
 namespace QFSW.MOP2
 {
+    /// <summary>
+    /// Object pool containing several copies of a template object (usually a prefab). Using the pool with GetObject and Release 
+    /// provides a high speed alternative to repeatadly calling Instantiate and Destroy.
+    /// </summary>
     [CreateAssetMenu(fileName = "Untitled Pool", menuName = "Master Object Pooler 2/Object Pool", order = 0)]
     public class ObjectPool : ScriptableObject
     {
+        [Tooltip("The name of the pool. Used for identification and as the key when using a MasterObjectPooler.")]
         [SerializeField] private string _name = string.Empty;
+
+        [Tooltip("The template object to center the pool on. All objects in the pool will be a copy of this object.")]
         [SerializeField] private GameObject _template = null;
+
+        [Tooltip("The default number of objects to create in this pool when initializing it.")]
         [SerializeField] private int _defaultSize;
+
+        [Tooltip("The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.")]
         [SerializeField] private int _maxSize = -1;
+
+        [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
 
-
+        /// <summary>
+        /// If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.
+        /// </summary>
         public bool IncrementalInstanceNames
         {
             get => _incrementalInstanceNames;
             set => _incrementalInstanceNames = value;
         }
+
+        /// <summary>
+        /// The name of the pool. Used for identification and as the key when using a MasterObjectPooler.
+        /// </summary>
         public string PoolName => _name;
 
+        /// <summary>
+        /// Parent transform for all pooled objects.
+        /// </summary>
         public Transform ObjectParent
         {
             get
@@ -51,11 +73,28 @@ namespace QFSW.MOP2
         #endregion
 
         #region Initialization/Creation
+        private ObjectPool() {  }
+
+        /// <summary>
+        /// Creates an ObjectPool.
+        /// </summary>
+        /// <param name="template">The template object to center the pool on. All objects in the pool will be a copy of this object.</param>
+        /// <param name="defaultSize">The default number of objects to create in this pool when initializing it.</param>
+        /// <param name="maxSize">The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.</param>
+        /// <returns>The created ObjectPool.</returns>
         public static ObjectPool Create(GameObject template, int defaultSize = 0, int maxSize = -1)
         {
             return Create(template, template.name, defaultSize, maxSize);
         }
 
+        /// <summary>
+        /// Creates an ObjectPool.
+        /// </summary>
+        /// <param name="template">The template object to center the pool on. All objects in the pool will be a copy of this object.</param>
+        /// <param name="name">The name of the pool. Used for identification and as the key when using a MasterObjectPooler.</param>
+        /// <param name="defaultSize">The default number of objects to create in this pool when initializing it.</param>
+        /// <param name="maxSize">The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.</param>
+        /// <returns>The created ObjectPool.</returns>
         public static ObjectPool Create(GameObject template, string name, int defaultSize = 0, int maxSize = -1)
         {
             ObjectPool pool = CreateInstance<ObjectPool>();
@@ -78,6 +117,9 @@ namespace QFSW.MOP2
             SceneManager.sceneUnloaded -= OnSceneUnload;
         }
 
+        /// <summary>
+        /// Initializes the ObjectPool.
+        /// </summary>
         public void Initialize()
         {
             if (string.IsNullOrWhiteSpace(_name))
@@ -124,8 +166,25 @@ namespace QFSW.MOP2
         #endregion
 
         #region GetObject/Component
+        /// <summary>
+        /// Gets an object from the pool.
+        /// </summary>
+        /// <returns>The retrieved object.</returns>
         public GameObject GetObject() { return GetObject(_template.transform.position); }
+
+        /// <summary>
+        /// Gets an object from the pool.
+        /// </summary>
+        /// <param name="position">The position to set the object to.</param>
+        /// <returns>The retrieved object.</returns>
         public GameObject GetObject(Vector3 position) { return GetObject(position, _template.transform.rotation); }
+
+        /// <summary>
+        /// Gets an object from the pool.
+        /// </summary>
+        /// <param name="position">The position to set the object to.</param>
+        /// <param name="rotation">The rotation to set the object to.</param>
+        /// <returns>The retrieved object.</returns>
         public GameObject GetObject(Vector3 position, Quaternion rotation)
         {
             GameObject obj;
@@ -154,22 +213,50 @@ namespace QFSW.MOP2
             return obj;
         }
 
+        /// <summary>
+        /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>() where T : class
         {
             return GetObjectComponent<T>(_template.transform.position);
         }
 
+        /// <summary>
+        /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <param name="position">The position to set the object to.</param>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(Vector3 position) where T : class
         {
             return GetObjectComponent<T>(position, _template.transform.rotation);
         }
 
+        /// <summary>
+        /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <param name="position">The position to set the object to.</param>
+        /// <param name="rotation">The rotation to set the object to.</param>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(Vector3 position, Quaternion rotation) where T : class
         {
             GameObject obj = GetObject(position, rotation);
             return GetObjectComponent<T>(obj);
         }
 
+        /// <summary>
+        /// Retrieves the specified component from an object using a cache to improve performance.
+        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
+        /// </summary>
+        /// <typeparam name="T">The component type to get.</typeparam>
+        /// <param name="obj">The object to get the component from.</param>
+        /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(GameObject obj) where T : class
         {
             Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
@@ -179,7 +266,7 @@ namespace QFSW.MOP2
             {
                 component = _componentCache[key] as T;
                 if (component == null) { _componentCache.Remove(key); }
-                else { return _componentCache[key] as T; }
+                else { return component; }
             }
 
             component = obj.GetComponent<T>();
@@ -189,6 +276,11 @@ namespace QFSW.MOP2
         #endregion
 
         #region Release/Destroy
+        /// <summary>
+        /// Releases an object and returns it back to the pool, effectively 'destroying' it from the scene.
+        /// Pool equivalent of Destroy.
+        /// </summary>
+        /// <param name="obj">The object to release.</param>
         public void Release(GameObject obj)
         {
             if (!_aliveObjects.Remove(obj.GetInstanceID()))
@@ -211,6 +303,10 @@ namespace QFSW.MOP2
             }
         }
 
+        /// <summary>
+        /// Releases a collection of objects and returns them back to the pool, effectively 'destroying' them from the scene.
+        /// </summary>
+        /// <param name="objs">the objects to release.</param>
         public void Release(IEnumerable<GameObject> objs)
         {
             foreach (GameObject obj in objs)
@@ -219,6 +315,9 @@ namespace QFSW.MOP2
             }
         }
 
+        /// <summary>
+        /// Releases every active object in this pool.
+        /// </summary>
         public void ReleaseAll()
         {
             _releaseAllBuffer.Clear();
@@ -226,12 +325,20 @@ namespace QFSW.MOP2
             Release(_releaseAllBuffer);
         }
 
+        /// <summary>
+        /// Forcibly destroys the object and does not return it to the pool.
+        /// </summary>
+        /// <param name="obj">The object to destroy.</param>
         public void Destroy(GameObject obj)
         {
             _aliveObjects.Remove(obj.GetInstanceID());
             Object.Destroy(obj);
         }
 
+        /// <summary>
+        /// Forcibly destroys a collection of objects and does not return them to the pool.
+        /// </summary>
+        /// <param name="objs">The objects to destroy.</param>
         public void Destroy(IEnumerable<GameObject> objs)
         {
             foreach (GameObject obj in objs)
@@ -242,6 +349,11 @@ namespace QFSW.MOP2
         #endregion
 
         #region Miscellaneous
+        /// <summary>
+        /// Populates the pool with the specified number of objects, so that they do not need instantiating later.
+        /// </summary>
+        /// <param name="quantity">The number of objects to populate it with.</param>
+        /// <param name="method">The population mode.</param>
         public void Populate(int quantity, PopulateMethod method = PopulateMethod.Set)
         {
             int newObjCount;
@@ -263,6 +375,9 @@ namespace QFSW.MOP2
             }
         }
 
+        /// <summary>
+        /// Destroys every object in the pool, both alive and pooled.
+        /// </summary>
         public void Purge()
         {
             foreach (GameObject obj in _pooledObjects) { Object.Destroy(obj); }
