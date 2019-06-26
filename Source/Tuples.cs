@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace QFSW.MOP2
+namespace QFSW.MOP2.Internal
 {
-    public struct Tuple2<T1, T2> : IEquatable<Tuple2<T1, T2>>
+    internal struct Tuple2<T1, T2> : IEquatable<Tuple2<T1, T2>>
     {
         public readonly T1 Value1;
         public readonly T2 Value2;

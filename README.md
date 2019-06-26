@@ -2,6 +2,8 @@
 
 Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any project.
 
+[Full Documentation and API Reference](www.qfsw.co.uk/docs/MOP2)
+
 ### Getting Started
 
 In order to get started, create an `ObjectPool` for your desired object.
@@ -38,4 +40,3 @@ Your file should end up like this
   },
 }
 ```
-_Documentation improvements coming soon_
