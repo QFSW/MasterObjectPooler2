@@ -2,7 +2,9 @@
 
 namespace QFSW.MOP2
 {
-    /// <summary>Automatically releases an object after the specified amount of time has surpassed.</summary>
+    /// <summary>
+    /// Automatically releases an object after the specified amount of time has surpassed.
+    /// </summary>
     [DisallowMultipleComponent]
     public class AutoPool : PoolableMonoBehaviour
     {
