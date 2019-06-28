@@ -63,6 +63,7 @@ namespace QFSW.MOP2
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
 
+        private bool _initialized = false;
         private int _instanceCounter = 0;
 
         #region Caches
@@ -121,19 +122,24 @@ namespace QFSW.MOP2
         /// <summary>
         /// Initializes the ObjectPool.
         /// </summary>
-        public void Initialize()
+        public void Initialize(bool forceReinitialization = false)
         {
-            if (string.IsNullOrWhiteSpace(_name))
+            if (!_initialized || forceReinitialization)
             {
-                _name = _template.name;
-                ObjectParent.name = _name;
+                _initialized = true;
+
+                if (string.IsNullOrWhiteSpace(_name))
+                {
+                    _name = _template.name;
+                    ObjectParent.name = _name;
+                }
+
+                if (string.IsNullOrWhiteSpace(name)) { name = _name; }
+
+                InitializeIPoolables();
+
+                Populate(_defaultSize, PopulateMethod.Set);
             }
-
-            if (string.IsNullOrWhiteSpace(name)) { name = _name; }
-
-            InitializeIPoolables();
-
-            Populate(_defaultSize, PopulateMethod.Set);
         }
 
         private void InitializeIPoolables()
@@ -390,8 +396,15 @@ namespace QFSW.MOP2
         #endregion
 
         #region Callbacks
+        private void Awake()
+        {
+            _initialized = false;
+        }
+
         private void OnSceneUnload(Scene scene)
         {
+            _initialized = false;
+
             if (!_objectParent)
             {
                 _pooledObjects.Clear();
