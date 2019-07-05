@@ -10,9 +10,9 @@
     "url": "https://github.com/QFSW/MasterObjectPooler2/issues"
   },
 
-  "version": "0.1.1",
+  "version": "0.2.0",
   "unity": "2018.1",
 
-  "license": "LICENSE",
+  "license": "LICENSE.txt",
   "readme": "README.md"
 }
