@@ -1,4 +1,10 @@
-# Master Object Pooler 2
+<p align="center">
+  <img src="Source/Textures/BannerCutout.png">
+</p>
+<p align="center">
+  <img src=https://img.shields.io/github/issues-closed-raw/QFSW/MasterObjectPooler2.svg?color=51c414>
+  <img src=https://img.shields.io/github/issues-raw/QFSW/MasterObjectPooler2.svg?color=c41414&style=popout>
+</p>
 
 Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any project.
 
@@ -40,5 +46,8 @@ Your file should end up like this
   },
 }
 ```
+<<<<<<< HEAD
 
 Thanks to [`caprapaul`](https://github.com/caprapaul) for logo work
+=======
+>>>>>>> master
