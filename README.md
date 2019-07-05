@@ -46,8 +46,5 @@ Your file should end up like this
   },
 }
 ```
-<<<<<<< HEAD
 
-Thanks to [`caprapaul`](https://github.com/caprapaul) for logo work
-=======
->>>>>>> master
+Thanks to [`caprapaul`](https://github.com/caprapaul) for logo work.
