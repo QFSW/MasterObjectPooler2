@@ -40,3 +40,5 @@ Your file should end up like this
   },
 }
 ```
+
+Thanks to [`caprapaul`](https://github.com/caprapaul) for logo work
