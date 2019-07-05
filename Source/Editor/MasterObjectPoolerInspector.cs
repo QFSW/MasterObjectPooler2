@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace QFSW.MOP2.Editor
 {
-    [CustomEditor(typeof(ObjectPool))]
-    public class ObjectPoolInspector : UnityEditor.Editor
+    [CustomEditor(typeof(MasterObjectPooler))]
+    public class MasterObjectPoolerInspector : UnityEditor.Editor
     {
         [SerializeField] private Texture2D _banner = null;
 
