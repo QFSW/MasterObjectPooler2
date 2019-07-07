@@ -6,7 +6,7 @@
   <img src=https://img.shields.io/github/issues-raw/QFSW/MasterObjectPooler2.svg?color=c41414&style=popout>
 </p>
 
-Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any project.
+Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any Unity project.
 
 [Full Documentation and API Reference](https://www.qfsw.co.uk/docs/MOP2)
 
