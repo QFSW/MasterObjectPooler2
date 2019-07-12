@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1761364006608128335}
   - component: {fileID: 1761364006608128330}
   - component: {fileID: 1761364006608128331}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TriggerCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1761364006608128336}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.7161716, y: 1.1577829, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -121,4 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df570c2ded90594da9e95f6ce518553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parentPool: {fileID: 0}
+  _parentPool: {fileID: 11400000, guid: e683e348e50fc3b469897aaad3d5c342, type: 2}
+  _collisionLayer:
+    serializedVersion: 2
+    m_Bits: 1
