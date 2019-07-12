@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad40add42ecce646952aaa9475056c8, type: 3}
   m_Name: TriggeredPool
   m_EditorClassIdentifier: 
-  _name: 
-  _template: {fileID: 0}
+  _name: Triggered
+  _template: {fileID: 1761364006608128336, guid: 31b9b4976e28c8d4f8da076b3cc39ae6,
+    type: 3}
   _defaultSize: 0
   _maxSize: -1
   _incrementalInstanceNames: 0
