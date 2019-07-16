@@ -1,9 +1,12 @@
 ﻿using QFSW.MOP2.Internal;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("QFSW.MOP2.Editor")]
 
 namespace QFSW.MOP2
 {
@@ -65,6 +68,7 @@ namespace QFSW.MOP2
 
         private bool _initialized = false;
         private int _instanceCounter = 0;
+        private readonly Regex _poolRegex = new Regex("[_ ]*[Pp]ool");
 
         #region Caches
         private readonly List<GameObject> _pooledObjects = new List<GameObject>();
@@ -128,17 +132,22 @@ namespace QFSW.MOP2
             {
                 _initialized = true;
 
-                if (string.IsNullOrWhiteSpace(_name))
-                {
-                    _name = _template.name;
-                    ObjectParent.name = _name;
-                }
-
-                if (string.IsNullOrWhiteSpace(name)) { name = _name; }
-
+                AutoFillName();
                 InitializeIPoolables();
-
                 Populate(_defaultSize, PopulateMethod.Set);
+            }
+        }
+
+        internal void AutoFillName()
+        {
+            if (string.IsNullOrWhiteSpace(_name))
+            {
+                _name = _poolRegex.Replace(name, string.Empty);
+                ObjectParent.name = _name;
+            }
+            else if (string.IsNullOrWhiteSpace(name))
+            {
+                name = _name;
             }
         }
 
