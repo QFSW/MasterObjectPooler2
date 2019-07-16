@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("QFSW.MOP2.Editor")]
+
 namespace QFSW.MOP2
 {
     /// <summary>
@@ -136,7 +138,7 @@ namespace QFSW.MOP2
             }
         }
 
-        private void AutoFillName()
+        internal void AutoFillName()
         {
             if (string.IsNullOrWhiteSpace(_name))
             {
