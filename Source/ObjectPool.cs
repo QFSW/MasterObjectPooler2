@@ -32,6 +32,9 @@ namespace QFSW.MOP2
         [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
 
+        [Tooltip("Repopulate the pool with objects when the scene changes to replace objects that were unloaded/destroyed.")]
+        [SerializeField] private bool _repopulateOnSceneChange = false;
+
         /// <summary>
         /// If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.
         /// </summary>
@@ -423,6 +426,11 @@ namespace QFSW.MOP2
             else
             {
                 _pooledObjects.RemoveAll(x => !x);
+            }
+
+            if (_repopulateOnSceneChange)
+            {
+                Populate(_defaultSize, PopulateMethod.Set);
             }
         }
         #endregion
