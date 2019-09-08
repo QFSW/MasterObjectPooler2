@@ -68,8 +68,8 @@ namespace QFSW.MOP2
 
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
+        public bool Initialized { get; private set; }
 
-        private bool _initialized = false;
         private int _instanceCounter = 0;
         private readonly Regex _poolRegex = new Regex("[_ ]*[Pp]ool");
 
@@ -131,9 +131,9 @@ namespace QFSW.MOP2
         /// </summary>
         public void Initialize(bool forceReinitialization = false)
         {
-            if (!_initialized || forceReinitialization)
+            if (!Initialized || forceReinitialization)
             {
-                _initialized = true;
+                Initialized = true;
 
                 AutoFillName();
                 InitializeIPoolables();
@@ -410,12 +410,12 @@ namespace QFSW.MOP2
         #region Callbacks
         private void Awake()
         {
-            _initialized = false;
+            Initialized = false;
         }
 
         private void OnSceneUnload(Scene scene)
         {
-            _initialized = false;
+            Initialized = false;
 
             if (!_objectParent)
             {
