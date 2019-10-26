@@ -318,6 +318,7 @@ namespace QFSW.MOP2
                 {
                     _pooledObjects.Add(obj);
                     obj.SetActive(false);
+                    obj.transform.SetParent(ObjectParent, false);
                 }
             }
         }
