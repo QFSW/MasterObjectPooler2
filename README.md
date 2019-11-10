@@ -29,7 +29,7 @@ You can make your own scripts that use the parent pool by implementing `IPoolabl
 
 Any script deriving from or using `PoolableMonoBehaviour` will have a new `Release` method, allowing you to release the object without needing a reference to its pool
 
-MOP2 also provides `GetObjectComponent<T>`, a GC free method of getting the object component. This should be used whenever possible to improve efficiency. **Do not use it if multiple of the same component exist on the object, or if the component will be destroyed/added at runtime**. It uses caches to improve the performance and will not behave correctly in these circumstances.
+MOP2 also provides `GetObjectComponent<T>`, a GC free method of getting the object component. This should be used whenever possible to improve efficiency.
 
 ### Installing via Package Manager
 
