@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ad40add42ecce646952aaa9475056c8, type: 3}
+  m_Name: DeathFXPool
+  m_EditorClassIdentifier: 
+  _name: DeathFX
+  _template: {fileID: 3826700234699233003, guid: fe040d82f7e1e9d499f8ac16d09a9489,
+    type: 3}
+  _defaultSize: 5
+  _maxSize: -1
+  _incrementalInstanceNames: 0

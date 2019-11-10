@@ -125,3 +125,4 @@ MonoBehaviour:
   _collisionLayer:
     serializedVersion: 2
     m_Bits: 1
+  _deathFX: {fileID: 11400000, guid: fda3ff401ed679a42b9bfa77cd0e5e9e, type: 2}
