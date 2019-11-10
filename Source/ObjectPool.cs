@@ -234,7 +234,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <returns>The retrieved component.</returns>
@@ -245,7 +244,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <param name="position">The position to set the object to.</param>
@@ -257,7 +255,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <param name="position">The position to set the object to.</param>
@@ -271,7 +268,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Retrieves the specified component from an object using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <param name="obj">The object to get the component from.</param>
