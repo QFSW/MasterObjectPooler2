@@ -12,11 +12,33 @@ namespace QFSW.MOP2
     /// </summary>
     public class MasterObjectPooler : MonoBehaviour
     {
+        [SerializeField] private bool _singletonMode = false;
         [SerializeField] private ObjectPool[] _pools = new ObjectPool[0];
+
+        /// <summary>
+        /// Singleton reference to the MOP. Only valid and set if the singleton option is enabled for the MOP.
+        /// </summary>
+        public static MasterObjectPooler Instance { get; private set; }
 
         private readonly Dictionary<string, ObjectPool> _poolTable = new Dictionary<string, ObjectPool>();
 
         #region Initialization
+        private void Awake()
+        {
+            if (_singletonMode)
+            {
+                if (Instance == null)
+                {
+                    Instance = this;
+                    DontDestroyOnLoad(gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+
         private void Start()
         {
             foreach (ObjectPool pool in _pools)
