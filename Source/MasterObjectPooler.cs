@@ -12,6 +12,7 @@ namespace QFSW.MOP2
     /// </summary>
     public class MasterObjectPooler : MonoBehaviour
     {
+        [Tooltip("Forces the MOP into singleton mode. This means the MOP will be made scene persistent and will not be destroyed when new scenes are loaded.")]
         [SerializeField] private bool _singletonMode = false;
         [SerializeField] private ObjectPool[] _pools = new ObjectPool[0];
 
