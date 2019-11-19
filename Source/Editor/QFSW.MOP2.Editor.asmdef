@@ -1,7 +1,7 @@
 {
     "name": "QFSW.MOP2.Editor",
     "references": [
-        "GUID:adb0f400804b2c0448682f502e5eb39b"
+        "QFSW.MOP2"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [
@@ -12,6 +12,5 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": []
+    "defineConstraints": []
 }

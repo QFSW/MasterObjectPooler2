@@ -35,7 +35,7 @@ namespace QFSW.MOP2
                 }
                 else
                 {
-                    Destroy(gameObject);
+                    Object.Destroy(gameObject);
                 }
             }
         }
@@ -264,7 +264,7 @@ namespace QFSW.MOP2
         {
             ObjectPool pool = GetPool(poolName);
             if (pool) { pool.Destroy(obj); }
-            else { Destroy(obj); }
+            else { Object.Destroy(obj); }
         }
 
         /// <summary>
