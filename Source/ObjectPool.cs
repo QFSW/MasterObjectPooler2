@@ -1,9 +1,12 @@
 ﻿using QFSW.MOP2.Internal;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("QFSW.MOP2.Editor")]
 
 namespace QFSW.MOP2
 {
@@ -28,6 +31,9 @@ namespace QFSW.MOP2
 
         [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
+
+        [Tooltip("Repopulate the pool with objects when the scene changes to replace objects that were unloaded/destroyed.")]
+        [SerializeField] private bool _repopulateOnSceneChange = false;
 
         /// <summary>
         /// If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.
@@ -62,9 +68,10 @@ namespace QFSW.MOP2
 
         private bool HasMaxSize => _maxSize > 0;
         private bool HasPooledObjects => _pooledObjects.Count > 0;
+        public bool Initialized { get; private set; }
 
-        private bool _initialized = false;
         private int _instanceCounter = 0;
+        private readonly Regex _poolRegex = new Regex("[_ ]*[Pp]ool");
 
         #region Caches
         private readonly List<GameObject> _pooledObjects = new List<GameObject>();
@@ -124,21 +131,26 @@ namespace QFSW.MOP2
         /// </summary>
         public void Initialize(bool forceReinitialization = false)
         {
-            if (!_initialized || forceReinitialization)
+            if (!Initialized || forceReinitialization)
             {
-                _initialized = true;
+                Initialized = true;
 
-                if (string.IsNullOrWhiteSpace(_name))
-                {
-                    _name = _template.name;
-                    ObjectParent.name = _name;
-                }
-
-                if (string.IsNullOrWhiteSpace(name)) { name = _name; }
-
+                AutoFillName();
                 InitializeIPoolables();
-
                 Populate(_defaultSize, PopulateMethod.Set);
+            }
+        }
+
+        internal void AutoFillName()
+        {
+            if (string.IsNullOrWhiteSpace(_name))
+            {
+                _name = _poolRegex.Replace(name, string.Empty);
+                ObjectParent.name = _name;
+            }
+            else if (string.IsNullOrWhiteSpace(name))
+            {
+                name = _name;
             }
         }
 
@@ -222,7 +234,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <returns>The retrieved component.</returns>
@@ -233,7 +244,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <param name="position">The position to set the object to.</param>
@@ -245,7 +255,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Gets an object from the pool, and then retrieves the specified component using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <param name="position">The position to set the object to.</param>
@@ -259,7 +268,6 @@ namespace QFSW.MOP2
 
         /// <summary>
         /// Retrieves the specified component from an object using a cache to improve performance.
-        /// Note: this should not be used if multiple components of the same type exist on the object, or if the component will be dynamically removed/added at runtime.
         /// </summary>
         /// <typeparam name="T">The component type to get.</typeparam>
         /// <param name="obj">The object to get the component from.</param>
@@ -306,6 +314,7 @@ namespace QFSW.MOP2
                 {
                     _pooledObjects.Add(obj);
                     obj.SetActive(false);
+                    obj.transform.SetParent(ObjectParent, false);
                 }
             }
         }
@@ -398,12 +407,12 @@ namespace QFSW.MOP2
         #region Callbacks
         private void Awake()
         {
-            _initialized = false;
+            Initialized = false;
         }
 
         private void OnSceneUnload(Scene scene)
         {
-            _initialized = false;
+            Initialized = false;
 
             if (!_objectParent)
             {
@@ -414,6 +423,11 @@ namespace QFSW.MOP2
             else
             {
                 _pooledObjects.RemoveAll(x => !x);
+            }
+
+            if (_repopulateOnSceneChange)
+            {
+                Populate(_defaultSize, PopulateMethod.Set);
             }
         }
         #endregion
