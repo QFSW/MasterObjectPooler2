@@ -31,7 +31,15 @@ namespace QFSW.MOP2
                 if (Instance == null)
                 {
                     Instance = this;
-                    DontDestroyOnLoad(gameObject);
+
+                    if (transform.parent == null)
+                    {
+                        DontDestroyOnLoad(gameObject);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Singleton mode enabled for the Master Object Pooler '{name}' which is not a root GameObject; this means it cannot be made scene persistent");
+                    }
                 }
                 else
                 {
