@@ -443,7 +443,7 @@ namespace QFSW.MOP2
 #if UNITY_EDITOR
         private void OnPlayModeStateChange(UnityEditor.PlayModeStateChange state)
         {
-            if (state == PlayModeStateChange.EnteredPlayMode)
+            if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
             {
                 CleanseInternal();
             }
