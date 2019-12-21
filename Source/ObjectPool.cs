@@ -212,14 +212,14 @@ namespace QFSW.MOP2
                 obj = _pooledObjects[_pooledObjects.Count - 1];
                 _pooledObjects.RemoveAt(_pooledObjects.Count - 1);
 
-                obj.transform.position = position;
-                obj.transform.rotation = rotation;
-
                 if (!obj)
                 {
                     Debug.LogWarning(string.Format("Object in pool '{0}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object", _name));
                     return GetObject(position, rotation);
                 }
+
+                obj.transform.position = position;
+                obj.transform.rotation = rotation;
             }
             else
             {
