@@ -119,11 +119,17 @@ namespace QFSW.MOP2
         {
             _instanceCounter = 0;
             SceneManager.sceneUnloaded += OnSceneUnload;
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChange;
+#endif
         }
 
         private void OnDisable()
         {
             SceneManager.sceneUnloaded -= OnSceneUnload;
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlayModeStateChange;
+#endif
         }
 
         /// <summary>
@@ -181,6 +187,20 @@ namespace QFSW.MOP2
 
             _instanceCounter++;
             return newObj;
+        }
+
+        private void CleanseInternal()
+        {
+            if (!_objectParent)
+            {
+                _pooledObjects.Clear();
+                _aliveObjects.Clear();
+                _componentCache.Clear();
+            }
+            else
+            {
+                _pooledObjects.RemoveAll(x => !x);
+            }
         }
         #endregion
 
@@ -412,24 +432,23 @@ namespace QFSW.MOP2
 
         private void OnSceneUnload(Scene scene)
         {
-            Initialized = false;
-
-            if (!_objectParent)
-            {
-                _pooledObjects.Clear();
-                _aliveObjects.Clear();
-                _componentCache.Clear();
-            }
-            else
-            {
-                _pooledObjects.RemoveAll(x => !x);
-            }
+            CleanseInternal();
 
             if (_repopulateOnSceneChange)
             {
                 Populate(_defaultSize, PopulateMethod.Set);
             }
         }
-        #endregion
+
+#if UNITY_EDITOR
+        private void OnPlayModeStateChange(UnityEditor.PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                CleanseInternal();
+            }
+        }
+#endif
+#endregion
     }
 }
