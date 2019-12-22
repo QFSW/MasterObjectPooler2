@@ -12,7 +12,7 @@ namespace QFSW.MOP2
 {
     /// <summary>
     /// Object pool containing several copies of a template object (usually a prefab). Using the pool with GetObject and Release 
-    /// provides a high speed alternative to repeatadly calling Instantiate and Destroy.
+    /// provides a high speed alternative to repeatedly calling Instantiate and Destroy.
     /// </summary>
     [CreateAssetMenu(fileName = "Untitled Pool", menuName = "Master Object Pooler 2/Object Pool", order = 0)]
     public class ObjectPool : ScriptableObject
@@ -31,6 +31,9 @@ namespace QFSW.MOP2
 
         [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
+
+        [Tooltip("Auto initializes the pool. In the editor this occurs when play-mode is entered. In builds, this occurs on startup")]
+        [SerializeField] private bool _autoInitialize = false;
 
         [Tooltip("Repopulate the pool with objects when the scene changes to replace objects that were unloaded/destroyed.")]
         [SerializeField] private bool _repopulateOnSceneChange = false;
@@ -459,6 +462,13 @@ namespace QFSW.MOP2
         private void Awake()
         {
             Initialized = false;
+
+#if !UNITY_EDITOR
+            if (_autoInitialize)
+            {
+                Initialize();
+            }
+#endif
         }
 
         private void OnSceneUnload(Scene scene)
@@ -479,6 +489,11 @@ namespace QFSW.MOP2
                 _instanceCounter = 0;
                 Initialized = false;
                 CleanseInternal();
+
+                if (_autoInitialize)
+                {
+                    Initialize();
+                }
             }
         }
 #endif
