@@ -477,6 +477,7 @@ namespace QFSW.MOP2
             if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
             {
                 _instanceCounter = 0;
+                Initialized = false;
                 CleanseInternal();
             }
         }
