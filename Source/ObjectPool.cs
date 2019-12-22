@@ -12,7 +12,7 @@ namespace QFSW.MOP2
 {
     /// <summary>
     /// Object pool containing several copies of a template object (usually a prefab). Using the pool with GetObject and Release 
-    /// provides a high speed alternative to repeatadly calling Instantiate and Destroy.
+    /// provides a high speed alternative to repeatedly calling Instantiate and Destroy.
     /// </summary>
     [CreateAssetMenu(fileName = "Untitled Pool", menuName = "Master Object Pooler 2/Object Pool", order = 0)]
     public class ObjectPool : ScriptableObject
@@ -31,6 +31,9 @@ namespace QFSW.MOP2
 
         [Tooltip("If enabled, object instances will be renamed to ObjectName#XXX where XXX is the instance number. This is useful if you want them all to be uniquely named.")]
         [SerializeField] private bool _incrementalInstanceNames = false;
+
+        [Tooltip("Auto initializes the pool. In the editor this occurs when play-mode is entered. In builds, this occurs on startup")]
+        [SerializeField] private bool _autoInitialize = false;
 
         [Tooltip("Repopulate the pool with objects when the scene changes to replace objects that were unloaded/destroyed.")]
         [SerializeField] private bool _repopulateOnSceneChange = false;
@@ -111,6 +114,37 @@ namespace QFSW.MOP2
             pool._template = template;
             pool._defaultSize = defaultSize;
             pool._maxSize = maxSize;
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Creates an ObjectPool and initializes it.
+        /// </summary>
+        /// <param name="template">The template object to center the pool on. All objects in the pool will be a copy of this object.</param>
+        /// <param name="defaultSize">The default number of objects to create in this pool when initializing it.</param>
+        /// <param name="maxSize">The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.</param>
+        /// <returns>The created ObjectPool.</returns>
+        public static ObjectPool CreateAndInitialize(GameObject template, int defaultSize = 0, int maxSize = -1)
+        {
+            ObjectPool pool = Create(template, defaultSize, maxSize);
+            pool.Initialize();
+
+            return pool;
+        }
+
+        /// <summary>
+        /// Creates an ObjectPool and initializes it.
+        /// </summary>
+        /// <param name="template">The template object to center the pool on. All objects in the pool will be a copy of this object.</param>
+        /// <param name="name">The name of the pool. Used for identification and as the key when using a MasterObjectPooler.</param>
+        /// <param name="defaultSize">The default number of objects to create in this pool when initializing it.</param>
+        /// <param name="maxSize">The maximum number of objects that can be kept in this pool. If it is exceeded, objects will be destroyed instead of pooled when returned. Set to -1 for no limit.</param>
+        /// <returns>The created ObjectPool.</returns>
+        public static ObjectPool CreateAndInitialize(GameObject template, string name, int defaultSize = 0, int maxSize = -1)
+        {
+            ObjectPool pool = Create(template, name, defaultSize, maxSize);
+            pool.Initialize();
 
             return pool;
         }
@@ -428,6 +462,13 @@ namespace QFSW.MOP2
         private void Awake()
         {
             Initialized = false;
+
+#if !UNITY_EDITOR
+            if (_autoInitialize)
+            {
+                Initialize();
+            }
+#endif
         }
 
         private void OnSceneUnload(Scene scene)
@@ -446,7 +487,13 @@ namespace QFSW.MOP2
             if (state == UnityEditor.PlayModeStateChange.EnteredPlayMode)
             {
                 _instanceCounter = 0;
+                Initialized = false;
                 CleanseInternal();
+
+                if (_autoInitialize)
+                {
+                    Initialize();
+                }
             }
         }
 #endif
