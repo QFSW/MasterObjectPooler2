@@ -32,7 +32,12 @@ Any script deriving from or using `PoolableMonoBehaviour` will have a new `Relea
 MOP2 also provides `GetObjectComponent<T>`, a GC free method of getting the object component. This should be used whenever possible to improve efficiency.
 
 ### Installing via Package Manager
+#### 2019.3+
+Starting with Unity 2019.3, the package manager UI has support for git packages
 
+Click the `+` to add a new git package and add `https://github.com/QFSW/MasterObjectPooler2.git` as the source
+
+#### 2018.3 - 2019.2
 To install via package manager, add the file `Packages/manifest.json` and add the following line to the `"dependencies"`
 ```
 "com.qfsw.mop2": "https://github.com/QFSW/MasterObjectPooler2.git"
