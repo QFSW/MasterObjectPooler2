@@ -11,8 +11,8 @@
   },
 
   "version": "0.2.10",
-  "unity": "2018.1",
+  "unity": "2018.4",
 
-  "license": "LICENSE.txt",
+  "license": "LICENSE.md",
   "readme": "README.md"
 }
