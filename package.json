@@ -1,18 +1,14 @@
 {
   "name": "com.qfsw.mop2",
-
   "displayName": "Master Object Pooler 2",
   "author": "QFSW",
   "description": "Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any project.",
-
   "bugs": {
     "email": "support@qfsw.co.uk",
     "url": "https://github.com/QFSW/MasterObjectPooler2/issues"
   },
-
-  "version": "0.2.10",
+  "version": "1.0.0",
   "unity": "2018.4",
-
   "license": "LICENSE.md",
   "readme": "README.md"
 }
