@@ -4,6 +4,7 @@
 <p align="center">
   <img src=https://img.shields.io/github/issues-closed-raw/QFSW/MasterObjectPooler2.svg?color=51c414>
   <img src=https://img.shields.io/github/issues-raw/QFSW/MasterObjectPooler2.svg?color=c41414&style=popout>
+  <a href="https://openupm.com/packages/com.qfsw.mop2/"><img src="https://img.shields.io/npm/v/com.qfsw.mop2?label=openupm&amp;registry_uri=https://package.openupm.com" /></a>
 </p>
 
 Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any Unity project.
@@ -32,12 +33,17 @@ Any script deriving from or using `PoolableMonoBehaviour` will have a new `Relea
 MOP2 also provides `GetObjectComponent<T>`, a GC free method of getting the object component. This should be used whenever possible to improve efficiency.
 
 ### Installing via Package Manager
+#### 2019.3+
+Starting with Unity 2019.3, the package manager UI has support for git packages
 
+Click the `+` to add a new git package and add `https://github.com/QFSW/MasterObjectPooler2.git` as the source
+
+#### 2018.3 - 2019.2
 To install via package manager, add the file `Packages/manifest.json` and add the following line to the `"dependencies"`
 ```
 "com.qfsw.mop2": "https://github.com/QFSW/MasterObjectPooler2.git"
 ```
-Your file should end up like this 
+Your file should end up like this
 ```
 {
   "dependencies": {
@@ -45,6 +51,13 @@ Your file should end up like this
     ...
   },
 }
+```
+
+#### Install via OpenUPM
+The package is available on the [openupm registry](https://openupm.com). It's recommended to install it via [openupm-cli](https://github.com/openupm/openupm-cli).
+
+```
+openupm add com.qfsw.mop2
 ```
 
 Thanks to [`caprapaul`](https://github.com/caprapaul) for logo work.
