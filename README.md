@@ -10,6 +10,7 @@
 Master Object Pooler 2 is a high performance, flexible and easy to use object pooling solution that can fit into any Unity project.
 
 [Full Documentation and API Reference](https://www.qfsw.co.uk/docs/MOP2)
+[Unity Asset Store](https://assetstore.unity.com/packages/tools/utilities/master-object-pooler-2-146525)
 
 ### Getting Started
 
