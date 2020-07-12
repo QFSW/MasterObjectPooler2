@@ -1,6 +1,7 @@
 ﻿using QFSW.MOP2.Internal;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -455,6 +456,16 @@ namespace QFSW.MOP2
             _pooledObjects.Clear();
             _aliveObjects.Clear();
             _componentCache.Clear();
+        }
+
+        /// <summary>
+        /// Gets all active objects in the pool.
+        /// </summary>
+        /// <returns>The active objects.</returns>
+        public IEnumerable<GameObject> GetAllActiveObjects()
+        {
+            return _aliveObjects.Values
+                .Where(x => x);
         }
         #endregion
 
