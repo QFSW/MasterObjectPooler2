@@ -336,6 +336,16 @@ namespace QFSW.MOP2
                 pool.Purge();
             }
         }
+
+        /// <summary>
+        /// Gets all active objects in the specified pool.
+        /// </summary>
+        /// <param name="poolName">The name of the pool to populate.</param>
+        /// <returns>The active objects.</returns>
+        public IEnumerable<GameObject> GetAllActiveObjects(string poolName)
+        {
+            return GetPool(poolName).GetAllActiveObjects();
+        }
         #endregion
     }
 }
