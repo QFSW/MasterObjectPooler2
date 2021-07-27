@@ -1,3 +1,6 @@
+V1.0.2
+Bug Fix 0001: Fixed MasterObjectPooler.Destroy
+
 V1.0.1
 Addition 0001: Added GetAllActiveObjects to ObjectPool and MasterObjectPooler
 
