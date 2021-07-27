@@ -61,7 +61,7 @@ namespace QFSW.MOP2
         private void DestroyPoolInternal(ObjectPool pool)
         {
             pool.Purge();
-            Destroy(pool.ObjectParent);
+            Object.Destroy(pool.ObjectParent.gameObject);
         }
         #endregion
 
