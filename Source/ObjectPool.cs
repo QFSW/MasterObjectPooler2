@@ -1,5 +1,4 @@
-﻿using QFSW.MOP2.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -62,7 +61,7 @@ namespace QFSW.MOP2
             {
                 if (!_objectParent)
                 {
-                    _objectParent = new GameObject(string.Format("{0} Pool", _name)).transform;
+                    _objectParent = new GameObject($"{_name} Pool").transform;
                 }
 
                 return _objectParent;
@@ -82,7 +81,7 @@ namespace QFSW.MOP2
         private readonly Dictionary<int, GameObject> _aliveObjects = new Dictionary<int, GameObject>();
 
         private readonly List<GameObject> _releaseAllBuffer = new List<GameObject>();
-        private readonly Dictionary<Tuple2<int, Type>, object> _componentCache = new Dictionary<Tuple2<int, Type>, object>();
+        private readonly Dictionary<(int id, Type type), object> _componentCache = new Dictionary<(int id, Type type), object>();
         #endregion
 
         #region Initialization/Creation
@@ -329,7 +328,7 @@ namespace QFSW.MOP2
         /// <returns>The retrieved component.</returns>
         public T GetObjectComponent<T>(GameObject obj) where T : class
         {
-            Tuple2<int, Type> key = new Tuple2<int, Type>(obj.GetInstanceID(), typeof(T));
+            (int id, Type type) key = (obj.GetInstanceID(), typeof(T));
             T component;
 
             if (_componentCache.ContainsKey(key))
@@ -355,7 +354,7 @@ namespace QFSW.MOP2
         {
             if (!_aliveObjects.Remove(obj.GetInstanceID()))
             {
-                Debug.LogWarning(string.Format("Object '{0}' could not be found in pool '{1}'; it may have already been released.", obj, _name));
+                Debug.LogWarning($"Object '{obj}' could not be found in pool '{_name}'; it may have already been released.");
                 return;
             }
 

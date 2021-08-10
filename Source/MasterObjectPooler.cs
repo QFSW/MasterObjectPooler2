@@ -84,7 +84,7 @@ namespace QFSW.MOP2
 
             if (_poolTable.ContainsKey(poolName))
             {
-                Debug.LogWarning(string.Format("{0} could not be added to the pool table as a pool with the same name already exists", poolName));
+                Debug.LogWarning($"{poolName} could not be added to the pool table as a pool with the same name already exists");
             }
             else
             {
@@ -103,10 +103,8 @@ namespace QFSW.MOP2
             {
                 return _poolTable[poolName];
             }
-            else
-            {
-                throw new ArgumentException(string.Format("Cannot get pool {0} as it is not present in the pool table", poolName));
-            }
+
+            throw new ArgumentException($"Cannot get pool {poolName} as it is not present in the pool table");
         }
 
         /// <summary>
@@ -116,10 +114,7 @@ namespace QFSW.MOP2
         /// <returns>The retrieved pool.</returns>
         public ObjectPool this[string poolName]
         {
-            get
-            {
-                return GetPool(poolName);
-            }
+            get => GetPool(poolName);
             set
             {
                 _poolTable.Remove(poolName);
