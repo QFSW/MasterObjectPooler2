@@ -269,12 +269,12 @@ namespace QFSW.MOP2
 
                 if (!obj)
                 {
-                    Debug.LogWarning(string.Format("Object in pool '{0}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object", _name));
+                    Debug.LogWarning($"Object in pool '{_name}' was null or destroyed; it may have been destroyed externally. Attempting to retrieve a new object");
                     return GetObject(position, rotation);
                 }
 
-                obj.transform.position = position;
-                obj.transform.rotation = rotation;
+                obj.transform.SetPositionAndRotation(position, rotation);
+                obj.transform.localScale = _template.transform.localScale;
             }
             else
             {
